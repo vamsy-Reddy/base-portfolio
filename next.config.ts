@@ -1,9 +1,8 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  /* config options here */
-  cacheComponents: true,
-  partialPrefetching: true,
+  // Hide the floating Next.js dev indicator (the "N" badge) in development.
+  devIndicators: false,
   turbopack: {
     rules: {
       "*.css": {

@@ -1,36 +1,96 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Atchi Sai Krishna — Developer Portfolio
 
-## Getting Started
+An interactive, 3D developer portfolio. A cursor-reactive GPU particle hero
+(React Three Fiber + custom GLSL) sets the tone; the content tells the story of
+what and how I learn, with every project opening into a real case study.
 
-First, run the development server:
+**Stack:** Next.js 16 (App Router) · React 19 · TypeScript · Tailwind CSS v4 ·
+React Three Fiber + drei + postprocessing · Framer Motion · Lenis.
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+---
+
+## The one thing to know: content is data-driven
+
+**Everything on the site is generated from a single typed file:**
+[`src/content/content.ts`](src/content/content.ts) (shape in
+[`src/content/types.ts`](src/content/types.ts)).
+
+### Add a new project
+
+Append one object to the `projects` array — it automatically becomes a 3D tilt
+card, a grid entry, and a case-study modal. No component changes:
+
+```ts
+{
+  slug: "my-new-project",
+  title: "My New Project",
+  tagline: "One-line hook shown on the card.",
+  role: "Frontend",
+  period: "2026",
+  featured: false,            // true → large, full-width hero card
+  problem: "What needed solving.",
+  approach: "What I did.",
+  impact: "What shipped / the result.",
+  tech: ["React", "TypeScript"],
+  links: { live: "https://…", repo: "https://…" }, // optional
+  accent: "#6ee7ff",          // optional card glow color
+}
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Add a job or milestone the same way via the `timeline` array; add skills via
+`skills`; edit the hero/contact copy via `profile`. Update the résumé by
+replacing the PDF in [`public/`](public/) and pointing `profile.resume` at it.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+---
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## Develop
 
-## Learn More
+```bash
+npm install
+npm run dev          # http://localhost:3000
+```
 
-To learn more about Next.js, take a look at the following resources:
+## Scripts
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+| Script             | What it does                              |
+| ------------------ | ----------------------------------------- |
+| `npm run dev`      | Dev server (Turbopack)                    |
+| `npm run build`    | Production build                          |
+| `npm start`        | Serve the production build                |
+| `npm run typecheck`| `tsc --noEmit`                            |
+| `npm run lint`     | ESLint                                    |
+| `npm run format`   | Prettier write                            |
+| `npm run test`     | Unit tests (Vitest + RTL)                 |
+| `npm run test:e2e` | End-to-end smoke tests (Playwright)       |
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+First e2e run only: `npx playwright install chromium`.
 
-## Deploy on Vercel
+## Environment
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+Set the canonical site URL so SEO/OG tags and sitemap use absolute URLs:
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+```bash
+# .env.local  (and in Vercel project settings)
+NEXT_PUBLIC_SITE_URL=https://your-domain.com
+```
+
+Falls back to `http://localhost:3000` in development.
+
+## Accessibility & performance
+
+- Fully usable without WebGL — a static backdrop replaces the 3D scene, and all
+  content is progressively enhanced.
+- Respects `prefers-reduced-motion` (no smooth scroll, no looping animation).
+- The Canvas is lazy-loaded (`ssr: false`), caps DPR and particle count per
+  device, and pauses rendering when off-screen or the tab is hidden.
+
+## SEO
+
+Per-page metadata, Open Graph + Twitter cards, a generated OG image
+([`src/app/opengraph-image.tsx`](src/app/opengraph-image.tsx)), `sitemap.xml`,
+`robots.txt`, and JSON-LD `Person` structured data.
+
+## Deploy (Vercel)
+
+Push to GitHub, import the repo in Vercel, set `NEXT_PUBLIC_SITE_URL`, deploy.
+No other configuration required.
