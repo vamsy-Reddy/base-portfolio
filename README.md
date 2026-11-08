@@ -6,7 +6,7 @@ whole site regenerates from a single typed file.
 
 > Built with **Next.js (App Router)**, **React Three Fiber + custom GLSL**, **Framer Motion**, **Lenis**, and **Tailwind CSS v4**.
 
-<!-- After deploying, add the live URL here, e.g. **Live:** https://base-portfolio.vercel.app -->
+**Live:** https://portfolio-three-phi-ave3oib35p.vercel.app
 
 ---
 
